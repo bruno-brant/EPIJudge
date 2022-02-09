@@ -3,22 +3,31 @@ from test_framework.test_failure import TestFailure
 
 
 class Stack:
+    data = []
+    max_stack = []
+
     def empty(self) -> bool:
-        # TODO - you fill in here.
-        return True
+        return len(self.data) == 0
 
     def max(self) -> int:
-        # TODO - you fill in here.
-        return 0
+        if not self.max_stack:
+            return None
+
+        return self.data[self.max_stack[-1]]
 
     def pop(self) -> int:
-        # TODO - you fill in here.
-        return 0
+        pop_idx = len(self.data) - 1
+
+        if pop_idx == self.max_stack[-1]:
+            self.max_stack.pop()
+
+        return self.data.pop()
 
     def push(self, x: int) -> None:
-        # TODO - you fill in here.
-        return
+        self.data.append(x)
 
+        if self.max() == None or self.max() <= x:
+            self.max_stack.append(len(self.data) - 1)
 
 def stack_tester(ops):
     try:
@@ -47,7 +56,7 @@ def stack_tester(ops):
             else:
                 raise RuntimeError('Unsupported stack operation: ' + op)
     except IndexError:
-        raise TestFailure('Unexpected IndexError exception')
+        raise TestFailure(f'Unexpected IndexError exception on {op}, {arg} ')
 
 
 if __name__ == '__main__':
