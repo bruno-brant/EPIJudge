@@ -4,13 +4,24 @@ from test_framework import generic_test
 
 
 def buy_and_sell_stock_once(prices: List[float]) -> float:
-    profit = 0
+    if len(prices) < 2:
+        return 0
 
-    for i in range(len(prices)):
-        for j in range(i + 1, len(prices)):
-            new_profit = prices[j] - prices[i]
-            if new_profit > profit:
-                profit = new_profit
+    buy = 0
+    sell = 1
+    profit = prices[sell] - prices[buy]
+
+    for i in range(1, len(prices)):
+        if prices[i] < prices[buy]:
+            buy = i
+            sell = i
+        elif prices[i] > prices[sell]:
+            sell = i
+
+        new_profit = prices[sell] - prices[buy]
+
+        if new_profit > profit:
+            profit = new_profit
 
     return profit
 
@@ -30,7 +41,7 @@ if __name__ == '__main__':
     test([1, 5, 4, 10], 9)
     test([5, 4, 10, 1], 6)
 
-    #exit()
+    # exit()
 
     exit(
         generic_test.generic_test_main('buy_and_sell_stock.py',
