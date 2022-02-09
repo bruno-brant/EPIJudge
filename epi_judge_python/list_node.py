@@ -42,6 +42,19 @@ class ListNode:
     def __str__(self):
         return self.__repr__()
 
+    def from_array(arr: list[int]):
+        if len(arr) == 0: 
+            return None
+
+        head = ListNode(arr[0])
+
+        browser = head
+        for i in range(1, len(arr)):
+            browser.next = ListNode(arr[i])
+            browser = browser.next
+
+        return head
+
 
 def list_size(node):
     result = 0
