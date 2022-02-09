@@ -3,7 +3,7 @@ from test_framework.binary_tree_utils import (binary_tree_to_string,
 
 
 class BinaryTreeNode:
-    def __init__(self, data=None, left=None, right=None):
+    def __init__(self, data: int = None, left=None, right=None):
         self.data = data
         self.left = left
         self.right = right
@@ -16,3 +16,15 @@ class BinaryTreeNode:
 
     def __str__(self):
         return self.__repr__()
+
+    def from_array(arr: list):
+        if arr == None:
+            return None
+
+        l = len(arr)
+
+        value = arr[0] if l >= 1 else None
+        left = BinaryTreeNode.from_array(arr[1]) if l >= 2 else None
+        right = BinaryTreeNode.from_array(arr[2]) if l >= 3 else None
+
+        return BinaryTreeNode(value, left, right)
