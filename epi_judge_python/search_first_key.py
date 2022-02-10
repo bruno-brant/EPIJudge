@@ -8,6 +8,7 @@ from test_framework.timed_executor import TimedExecutor
 def search_first_of_k(A: List[int], k: int) -> int:
     l = 0 
     r = len(A) - 1
+    result = -1
 
     while l <= r:
         m = floor(l + ((r - l) / 2)) # avoid overflow
@@ -17,11 +18,10 @@ def search_first_of_k(A: List[int], k: int) -> int:
         elif k > A[m]:
             l = m + 1
         else:
-            while m > 0 and A[m-1] == k:
-                m -= 1
-            return m
+            result = m
+            r = m - 1
 
-    return -1
+    return result
 
 
 def test(array, target, expected):
