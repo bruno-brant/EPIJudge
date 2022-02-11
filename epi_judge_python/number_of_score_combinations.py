@@ -2,9 +2,7 @@ from typing import List
 
 from test_framework import generic_test
 
-
-def make_matrix(num_lines: int, num_columns: int, value=0):
-    return [[value] * num_columns for _ in range(num_lines)]
+from matrix import make_matrix
 
 
 def num_combinations_for_final_score(final_score: int,
