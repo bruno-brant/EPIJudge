@@ -2,15 +2,17 @@ from typing import List
 
 from test_framework import generic_test
 
+[448, 381, 227, 992, -529, 21]
+
 
 def find_maximum_subarray(A: List[int]) -> int:
-    max = 0
-    for i in range(len(A) + 1):
-        for j in range(i + 1, len(A) + 1):
-            sum_ = sum(A[i:j])
-            max = max if max > sum_ else sum_
+    max_ = 0
+    subarray = 0
+    for item in A:
+        subarray = subarray + item if subarray + item > item else item
+        max_ = max(max_, subarray)
 
-    return max
+    return max_
 
 
 if __name__ == '__main__':
