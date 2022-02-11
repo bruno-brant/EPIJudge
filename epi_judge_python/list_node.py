@@ -1,3 +1,5 @@
+from typing import List
+
 class ListNode:
     def __init__(self, data=0, next=None):
         self.data = data
@@ -42,7 +44,7 @@ class ListNode:
     def __str__(self):
         return self.__repr__()
 
-    def from_array(arr: list[int]):
+    def from_array(arr: List[int]):
         if len(arr) == 0: 
             return None
 
