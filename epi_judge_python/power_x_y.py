@@ -6,15 +6,20 @@ def power(x: float, y: int) -> float:
     if y == 0:
         return 1
 
+    if y == 1:
+        return x
+
+    if y == 2:
+        return x * x
+
     if y < 0:
-        return 1 / power(x, abs(y))
+        return 1 / power(x, -y)
 
-    result = x
+    if y % 2 == 0:
+        p = power(x, y / 2)
+        return  p * p
 
-    for _ in range(1, y):
-        result *= x
-
-    return result
+    return power(x, y - 1) * x
 
 
 def test(x, y):
