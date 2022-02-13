@@ -1,4 +1,5 @@
 import functools
+from random import randint
 from typing import List
 
 from test_framework import generic_test
@@ -8,9 +9,19 @@ from test_framework.random_sequence_checker import (
 from test_framework.test_utils import enable_executor_hook
 
 
+def swap(A: List[int], i: int, j: int):
+    temp = A[i]
+    A[i] = A[j]
+    A[j] = temp
+
+
 def random_sampling(k: int, A: List[int]) -> None:
-    # TODO - you fill in here.
-    return
+    idx = 0
+
+    while idx < k:
+        pos = randint(idx, len(A) - 1)
+        swap(A, pos, idx)
+        idx += 1
 
 
 @enable_executor_hook
