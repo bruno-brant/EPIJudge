@@ -1,7 +1,8 @@
 from typing import List
 
+
 class ListNode:
-    def __init__(self, data=0, next=None):
+    def __init__(self, data=0, next: 'ListNode' = None):
         self.data = data
         self.next = next
 
@@ -44,8 +45,9 @@ class ListNode:
     def __str__(self):
         return self.__repr__()
 
+    @staticmethod
     def from_array(arr: List[int]):
-        if len(arr) == 0: 
+        if len(arr) == 0:
             return None
 
         head = ListNode(arr[0])
