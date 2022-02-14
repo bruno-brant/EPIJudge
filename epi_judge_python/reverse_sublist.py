@@ -4,6 +4,23 @@ from typing import List, Optional
 from list_node import ListNode
 from test_framework import generic_test
 
+def reverse_sublist_reference_impl(head: ListNode, start: int, finish: int) -> Optional[ListNode]:
+    dummy_head = ListNode(None, head)
+    sublist_head = dummy_head
+    k = 1
+    while k < start:
+        sublist_head = sublist_head.next
+        k += 1
+
+    sublist_iter = sublist_head.next
+    while k < finish:
+        k += 1
+        temp = sublist_iter.next
+        sublist_iter.next = temp.next
+        temp.next = sublist_head.next
+        sublist_head.next = temp
+
+    return dummy_head.next
 
 def reverse_sublist(head: ListNode, start: int, finish: int) -> Optional[ListNode]:
     if start == finish:
@@ -39,7 +56,7 @@ def reverse_sublist(head: ListNode, start: int, finish: int) -> Optional[ListNod
     
     start_node.next = follow_node
 
-    if start_node_parent == None:
+    if start_node_parent is None:
         return previous
 
     start_node_parent.next = end_node
