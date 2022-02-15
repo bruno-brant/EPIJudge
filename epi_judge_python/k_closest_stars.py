@@ -1,9 +1,11 @@
 import functools
 import math
+import sys
 from typing import Iterator, List
 
 from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
+from utilities import MaxHeap, MinHeap
 
 
 class Star:
@@ -28,8 +30,33 @@ class Star:
 
 
 def find_closest_k_stars(stars: Iterator[Star], k: int) -> List[Star]:
-    # TODO - you fill in here.
-    return []
+    heap = MinHeap()
+    for star in stars:
+        heap += star
+
+    result = []
+    for _ in range(k):
+        result.append(heap())
+
+    return result
+
+
+def find_closest_k_stars_optimal(stars: Iterator[Star], k: int) -> List[Star]:
+    heap: MaxHeap[Star] = MaxHeap()
+
+    for star in stars:
+        if len(heap) < k:
+            heap += star
+        elif heap.peek() > star:
+            heap()
+            heap += star
+
+    result = []
+
+    for _ in range(k):
+        result.append(heap())
+
+    return result
 
 
 def comp(expected_output, output):
@@ -43,12 +70,11 @@ def comp(expected_output, output):
 @enable_executor_hook
 def find_closest_k_stars_wrapper(executor, stars, k):
     stars = [Star(*a) for a in stars]
-    return executor.run(functools.partial(find_closest_k_stars, iter(stars),
-                                          k))
+    return executor.run(functools.partial(find_closest_k_stars_optimal, iter(stars), k))
 
 
 if __name__ == '__main__':
-    exit(
+    sys.exit(
         generic_test.generic_test_main('k_closest_stars.py',
                                        'k_closest_stars.tsv',
                                        find_closest_k_stars_wrapper, comp))
