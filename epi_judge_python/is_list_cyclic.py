@@ -20,6 +20,53 @@ def has_cycle(head: ListNode) -> Optional[ListNode]:
     return None
 
 
+def has_cycle_optimal(head: ListNode) -> Optional[ListNode]:
+    """
+    Optimal implementation of the has cycle problem (the book)
+    [I knew how to implement the two pointers approach, but not how to get
+    the start of the cycle - I was looking for something better]
+    """
+
+    if head is None:
+        return None
+
+    slow = head
+    fast = head.next
+
+    while fast is not None and id(slow) != id(fast):
+        slow = slow.next
+
+        if fast.next is None:
+            return None
+
+        fast = fast.next.next
+
+    if fast is None:
+        return None
+
+    # Calculate the Cycle length C
+
+    C = 1
+    while id(fast.next) != id(slow):
+        C += 1
+        fast = fast.next
+
+    def advance(node: ListNode, n: int):
+        while n > 0:
+            node = node.next
+            n -= 1
+        return node
+
+    slow = head
+    fast = advance(head, C)
+
+    while id(slow) != id(fast):
+        slow = slow.next
+        fast = fast.next
+
+    return slow
+
+
 @enable_executor_hook
 def has_cycle_wrapper(executor, head, cycle_idx):
     cycle_length = 0
@@ -41,7 +88,7 @@ def has_cycle_wrapper(executor, head, cycle_idx):
         cursor.next = cycle_start
         cycle_length += 1
 
-    result = executor.run(functools.partial(has_cycle, head))
+    result = executor.run(functools.partial(has_cycle_optimal, head))
 
     if cycle_idx == -1:
         if result is not None:
