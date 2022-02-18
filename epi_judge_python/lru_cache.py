@@ -4,21 +4,53 @@ from test_framework.test_failure import TestFailure
 
 class LruCache:
     def __init__(self, capacity: int) -> None:
-        # TODO - you fill in here.
-        return
+        self._cache = {}
+        self._capacity = capacity
+        self._mru = []
 
     def lookup(self, isbn: int) -> int:
-        # TODO - you fill in here.
-        return 0
+        if isbn not in self._cache:
+            return -1
+
+        self._use(isbn)
+
+        return self._cache[isbn]
 
     def insert(self, isbn: int, price: int) -> None:
-        # TODO - you fill in here.
-        return
+        if isbn in self._cache:
+            self._use(isbn)
+        else:
+            self._evict()
+
+            self._cache[isbn] = price
+            self._mru.insert(0, isbn)
 
     def erase(self, isbn: int) -> bool:
-        # TODO - you fill in here.
+        if isbn not in self._cache:
+            return False
+
+        del self._cache[isbn]
+
+        index = self._mru.index(isbn)
+        self._mru.pop(index)
+
         return True
 
+    def _use(self, isbn: int):
+        index = self._mru.index(isbn)
+        self._mru.pop(index)
+        self._mru.insert(0, isbn)
+
+    def _evict(self):
+        if len(self._cache) < self._capacity:
+            return
+
+        lru_isbn = self._mru.pop()
+
+        del self._cache[lru_isbn]
+
+    def __repr__(self) -> str:
+        return repr(self._cache)
 
 def lru_cache_tester(commands):
     if len(commands) < 1 or commands[0][0] != 'LruCache':
