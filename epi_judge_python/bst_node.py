@@ -1,5 +1,9 @@
+from typing import Optional, Tuple
 from test_framework.binary_tree_utils import (binary_tree_to_string,
                                               equal_binary_trees)
+
+
+TreeSpec = Tuple[int, Optional['TreeSpec'], Optional['TreeSpec']]
 
 
 class BstNode:
@@ -14,3 +18,13 @@ class BstNode:
 
     def __str__(self):
         return self.__repr__()
+
+    @staticmethod
+    def from_array(arr: TreeSpec) -> 'BstNode':
+        if not arr:
+            return None
+
+        left = BstNode.from_array(arr[1]) if len(arr) > 1 else None
+        right = BstNode.from_array(arr[2]) if len(arr) > 2 else None
+
+        return BstNode(arr[0], left, right)
