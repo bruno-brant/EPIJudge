@@ -1,85 +1,59 @@
-from typing import Set, Dict, List
-
+from typing import Generic, Set, Dict, List, TypeVar
 from test_framework import generic_test
 
 AdjacencyList = Dict[str, List[str]]
 
+T = TypeVar("T")
 
-def is_within_distance(w1: str, w2: str, max_dist: int) -> bool:
-    dist = 0
-    for c1, c2 in zip(w1, w2):
-        if c1 != c2:
-            dist += 1
-            if dist > max_dist:
-                return False
-    return True
-
-
-def build_graph(D: Set[str]) -> AdjacencyList:
-    g: AdjacencyList = {}
-
-    while D:
-        node = D.pop()
-
-        if node not in g:
-            g[node] = []
-
-        for w in D:
-            if not is_within_distance(node, w, 1):
-                continue
-            
-            g[node].append(w)
-
-            if w not in g:
-                g[w] = [node]
-            else:
-                g[w].append(node)
-
-    return g
-
-
-class Queue:
-    def __init__(self, data: List[str]) -> None:
+class Queue(Generic[T]):
+    def __init__(self, data: List[T]) -> None:
         self._data = data if data is not None else []
 
-    def enqueue(self, w: str) -> None:
-        self._data.insert(0, w)
+    def enqueue(self, elem: T) -> None:
+        self._data.insert(0, elem)
 
-    def dequeue(self) -> str:
+    def dequeue(self) -> T:
         return self._data.pop()
 
     def is_empty(self) -> bool:
         return len(self._data) == 0
 
+variations_cache = {}
+
+def get_variations(w: str):
+    if w in variations_cache:
+        return variations_cache[w]
+
+    variations_of_w = []
+    
+    for i in range(len(w)):
+        for j in range(ord('a'), ord('z') + 1):
+            var = w[0:i] + chr(j) + w[i+1:]
+            if var != w:
+                variations_of_w.append(var)
+
+    variations_cache[w] = variations_of_w
+
+    return variations_of_w
+
 
 def transform_string(D: Set[str], s: str, t: str) -> int:
-    g = build_graph(D)
+    D.remove(s)
+    queue = Queue([(s, 0)])
 
-    parent: Dict[str, str] = {s: None}
-    to_process = Queue([s])
-    discovered = set([s])
+    while not queue.is_empty():
+        node, dist = queue.dequeue()
 
-    while not to_process.is_empty():
-        node = to_process.dequeue()
-
-        for child in g[node]:
-            if child in discovered:
+        for adj in get_variations(node):
+            if adj not in D:
                 continue
 
-            discovered.add(child)
-            to_process.enqueue(child)
-            parent[child] = node
+            if adj == t:
+                return dist + 1
 
-    distance = 0
-    current = t
-    while current != s:
-        current = parent.get(current, -1)
-        if current == -1:
-            return -1
-        distance += 1
-
-    return distance
-
+            D.remove(adj)
+            queue.enqueue((adj, dist + 1))
+    return -1
 
 if __name__ == '__main__':
     exit(
