@@ -2,9 +2,9 @@ from typing import List
 
 
 class ListNode:
-    def __init__(self, data=0, next: 'ListNode' = None):
+    def __init__(self, data=0, next_: 'ListNode' = None):
         self.data = data
-        self.next = next
+        self.next = next_
 
     def __eq__(self, other):
         a, b = self, other
