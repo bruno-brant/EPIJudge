@@ -1,9 +1,8 @@
 from test_framework import generic_test
-
+import is_string_palindromic as palindrome 
 
 def is_palindrome(s: str) -> bool:
-    # TODO - you fill in here.
-    return True
+    return palindrome.is_palindromic(s)
 
 
 if __name__ == '__main__':
