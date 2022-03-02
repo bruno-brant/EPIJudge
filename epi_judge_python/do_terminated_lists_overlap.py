@@ -6,21 +6,36 @@ from test_framework.test_failure import TestFailure
 from test_framework.test_utils import enable_executor_hook
 
 
+def number_of_nodes(head: ListNode):
+    n = 0
+
+    while head is not None:
+        n += 1
+        head = head.next
+
+    return n
+
+
 def overlapping_no_cycle_lists(l0: ListNode, l1: ListNode) -> ListNode:
     if l0 is None or l1 is None:
         return None
 
-    seem = set()
+    len_l0 = number_of_nodes(l0)
+    len_l1 = number_of_nodes(l1)
 
-    while l0 is not None:
-        seem.add(id(l0))
-        l0 = l0.next
+    larger, smaller = (l0, l1) if len_l0 > len_l1 else (l1, l0)
 
-    while l1 is not None:
-        if id(l1) in seem:
-            return l1
+    diff = abs(len_l0 - len_l1)
 
-        l1 = l1.next
+    for _ in range(diff):
+        larger = larger.next
+
+    while larger.next is not None and smaller.next is not None:
+        if id(larger) == id(smaller):
+            return larger
+
+        larger = larger.next
+        smaller = smaller.next
 
     return None
 

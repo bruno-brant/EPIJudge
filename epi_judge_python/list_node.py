@@ -45,6 +45,15 @@ class ListNode:
     def __str__(self):
         return self.__repr__()
 
+    # def __len__(self):
+    #     browser = self
+    #     l = 0
+    #     while browser is not None:
+    #         l += 1
+    #         browser = browser.next
+
+        return l
+
     @staticmethod
     def from_array(arr: List[int]):
         if len(arr) == 0:
