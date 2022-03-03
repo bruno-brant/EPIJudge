@@ -1,12 +1,25 @@
 from typing import Iterator, List
 
 from test_framework import generic_test
+from utilities import MaxHeap, MinHeap
 
 
 def sort_approximately_sorted_array(sequence: Iterator[int],
                                     k: int) -> List[int]:
-    # TODO - you fill in here.
-    return []
+    heap = MinHeap()
+
+    while len(heap) != k:
+        heap += next(sequence)
+
+    result = []
+    for remaining in sequence:
+        result.append(heap())
+        heap += remaining
+
+    while heap:
+        result.append(heap())
+
+    return result
 
 
 def sort_approximately_sorted_array_wrapper(sequence, k):
