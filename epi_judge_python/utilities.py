@@ -1,4 +1,4 @@
-from typing import Any, Callable, Generic, Iterable, List, TypeVar
+from typing import Any, Callable, Generic, Iterable, List, TypeVar, Union
 
 
 def cross(__iter1: Iterable, __iter2: Iterable):
@@ -119,6 +119,12 @@ def test_max_heap(unordered: List[int]):
 
     assert actual == ordered, f"Expected {ordered}, got {actual}"
 
+
+test_max_heap([12, 5124, -2, 12, 2, 5, 7, 982, -1000])
+test_max_heap([])
+test_max_heap([0])
+
+
 def test_min_heap(unordered: List[int]):
     ordered = sorted(unordered)
 
@@ -134,11 +140,52 @@ def test_min_heap(unordered: List[int]):
     assert actual == ordered, f"Expected {ordered}, got {actual}"
 
 
-if __name__ == '__main__':
-    test_max_heap([12, 5124, -2, 12, 2, 5, 7, 982, -1000])
-    test_max_heap([])
-    test_max_heap([0])
+test_min_heap([12, 5124, -2, 12, 2, 5, 7, 982, -1000])
+test_min_heap([])
+test_min_heap([0])
 
-    test_min_heap([12, 5124, -2, 12, 2, 5, 7, 982, -1000])
-    test_min_heap([])
-    test_min_heap([0])
+TSlice = TypeVar("TSlice")
+
+
+class Slice(Generic[TSlice]):
+    def __init__(self, arr: Union[List[TSlice], 'Slice[TSlice]'], start: int = 0, end: int = None):
+        end = end if end is not None else len(arr)
+
+        if isinstance(arr, list):
+            self._arr = arr
+            self._start = start
+            self._end = end
+        elif isinstance(arr, Slice):
+            self._arr = arr._arr
+            self._start = arr._start + start
+            self._end = arr._start + end
+        else:
+            raise ValueError("Invalid arr")
+
+    def index(self, value):
+        for i, v in enumerate(self._arr[self._start:self._end]):
+            if v == value:
+                return i
+
+        return -1
+
+    def __getitem__(self, idx: 0) -> TSlice:
+        if idx > (self._end - self._start):
+            raise IndexError(idx)
+
+        return self._arr[self._start + idx]
+
+    def __len__(self):
+        return self._end - self._start
+
+    def __repr__(self):
+        return repr(self._arr[self._start:self._end])
+
+    def __str__(self):
+        return str(self._arr[self._start:self._end])
+
+
+assert Slice([0, 1, 2, 3], 2)[1] == 3
+assert Slice([0, 1], 1)[0] == 1
+assert Slice(Slice([0, 1, 2, 3, 4], 2, 3), 1)[0] == 3
+assert repr(Slice([0, 1, 2], 0)) == "[0, 1, 2]"

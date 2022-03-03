@@ -1,8 +1,10 @@
 import sys
+
 from typing import List
 
 from binary_tree_node import BinaryTreeNode
 from test_framework import generic_test
+from utilities import Slice
 
 
 def binary_tree_from_preorder_inorder(preorder: List[int],
@@ -21,10 +23,12 @@ def binary_tree_from_preorder_inorder(preorder: List[int],
 
     head = preorder[0]
     pivot = inorder.index(head)
-    in_left = inorder[0:pivot]
-    in_right = inorder[pivot+1:]
-    pre_left = list(filter(lambda p: p in in_left, preorder))
-    pre_right = list(filter(lambda p: p in in_right, preorder))
+
+    in_left = Slice(inorder, 0, pivot)
+    pre_left = Slice(preorder, 1, 1 + len(in_left))
+
+    in_right = Slice(inorder, pivot + 1)
+    pre_right = Slice(preorder, 1 + pivot, 1 + pivot + len(in_right))
 
     return BinaryTreeNode(head,
                           binary_tree_from_preorder_inorder(pre_left, in_left),
