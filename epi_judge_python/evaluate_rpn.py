@@ -20,7 +20,7 @@ def evaluate(expression: str) -> int:
 
     s = Stack[int]()
 
-    for expression in expressions:
+    for expression in expressions: 
         if expression == '+':
             s.push(s.pop() + s.pop())
         elif expression == '-':
