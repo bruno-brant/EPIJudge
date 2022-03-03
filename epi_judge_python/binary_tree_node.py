@@ -19,7 +19,7 @@ class BinaryTreeNode:
 
     @staticmethod
     def from_array(arr: list):
-        if arr == None:
+        if arr is None:
             return None
 
         l = len(arr)
