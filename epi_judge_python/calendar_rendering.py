@@ -4,9 +4,6 @@ from typing import List
 
 from test_framework import generic_test
 from test_framework.test_utils import enable_executor_hook
-from utilities import Heap
-
-# Event is a tuple (start_time, end_time)
 
 
 class Event:
@@ -21,19 +18,43 @@ class Event:
         return self.__repr__()
 
 
+class Endpoint:
+    def __init__(self, value: int, is_start: bool) -> None:
+        self.value = value
+        self.is_start = is_start
+
+    def __eq__(self, __o: object) -> bool:
+        if __o == None:
+            return False
+
+        return self.value == __o.value and self.is_start == __o.is_start
+
+    def __lt__(self, __o: 'Endpoint'):
+        if self.value < __o.value:
+            return True
+
+        if self.value == __o.value:
+            return (self.is_start and not __o.is_start)
+
+        return False
+
+
 def find_max_simultaneous_events(A: List[Event]) -> int:
-    overlapping = Heap[Event](lambda a, b: a.finish < b.finish)
+    endpoints: List[Endpoint] = []
 
-    A = sorted(A, key=lambda _: _.start)
+    for i in A:
+        endpoints.append(Endpoint(i.start, True))
+        endpoints.append(Endpoint(i.finish, False))
 
-    max_height = 0
+    endpoints = sorted(endpoints)
 
-    for a in A:
-        while overlapping and overlapping.peek().finish < a.start:
-            overlapping()
-
-        overlapping += a
-        max_height = max(max_height, len(overlapping))
+    max_height = height = 0
+    for e in endpoints:
+        if e.is_start:
+            height += 1
+        else:
+            height -= 1
+        max_height = max(max_height, height)
 
     return max_height
 
