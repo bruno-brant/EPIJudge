@@ -2,8 +2,20 @@ from test_framework import generic_test
 
 
 def can_form_palindrome(s: str) -> bool:
-    # TODO - you fill in here.
-    return True
+    needs_pair = set()
+
+    for i in s:
+        if i not in needs_pair:
+            needs_pair.add(i)
+        else:
+            needs_pair.remove(i)
+
+    if len(s) % 2 == 1: # odd
+        return len(needs_pair) <= 1
+    else:               # even
+        return len(needs_pair) == 0
+
+    
 
 
 if __name__ == '__main__':
