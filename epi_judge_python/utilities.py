@@ -17,7 +17,10 @@ class Heap(Generic[T]):
         self.heap: List[T] = []
         self._dominates = dominates
 
-    def __call__(self, *args: Any, **kwds: Any) -> T:
+    def peek(self):
+        return self.heap[0]
+
+    def __call__(self) -> T:
         if len(self) == 1:
             return self.heap.pop()
 
@@ -71,6 +74,12 @@ class Heap(Generic[T]):
 
         self._bubble_up(parent_idx)
 
+    def __repr__(self) -> str:
+        return repr(self.heap)
+
+    def __str__(self) -> str:
+        return str(self.heap)
+
     def _right(self, index: int) -> int:
         k = index * 2
         return k if k < len(self) else None
@@ -85,8 +94,7 @@ class Heap(Generic[T]):
 
         return index // 2
 
-    def peek(self):
-        return self.heap[0]
+   
 
 
 class MinHeap(Heap[T]):
