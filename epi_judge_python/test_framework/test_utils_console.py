@@ -57,7 +57,7 @@ def print_test_info(test_result, test_nr, total_tests, diagnostic, timer):
     print_test_info.caret_at_line_start = False
 
     if test_result != TestResult.PASSED:
-        print(' {}'.format(diagnostic), flush=True)
+        print(f' {diagnostic}', flush=True)
         print_test_info.caret_at_line_start = True
 
 
