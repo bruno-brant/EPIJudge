@@ -2,14 +2,38 @@ from test_framework import generic_test
 from test_framework.test_failure import TestFailure
 
 
+class Stack:
+    def __init__(self) -> None:
+        self._data = []
+
+    def push(self, x: int):
+        self._data.append(x)
+
+    def pop(self):
+        return self._data.pop()
+
+    def __len__(self):
+        return len(self._data)
+
+    def __repr__(self) -> str:
+        return repr(self._data)
+
+
 class Queue:
+    def __init__(self) -> None:
+        self._enqueue = Stack()
+        self._dequeue = Stack()
+
     def enqueue(self, x: int) -> None:
-        # TODO - you fill in here.
-        return
+        self._enqueue.push(x)
 
     def dequeue(self) -> int:
-        # TODO - you fill in here.
-        return 0
+        if not self._dequeue:
+            while self._enqueue:
+                self._dequeue.push(self._enqueue.pop())
+        
+        return self._dequeue.pop()
+
 
 
 def queue_tester(ops):
