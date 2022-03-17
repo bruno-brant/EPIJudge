@@ -20,7 +20,10 @@ class Heap(Generic[T]):
     def peek(self):
         return self.heap[0]
 
-    def __call__(self) -> T:
+    def push(self, v: T):
+        return self.__add__(v)
+
+    def pop(self) -> T:
         if len(self) == 1:
             return self.heap.pop()
 
@@ -32,7 +35,10 @@ class Heap(Generic[T]):
 
         return value
 
-    def __add__(self, v: T) -> 'MaxHeap':
+    def __call__(self) -> T:
+        return self.pop()
+
+    def __add__(self, v: T) -> 'Heap':
         self.heap.append(v)
         self._bubble_up(len(self.heap) - 1)
         return self
@@ -93,8 +99,6 @@ class Heap(Generic[T]):
             return None
 
         return index // 2
-
-   
 
 
 class MinHeap(Heap[T]):
